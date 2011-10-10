@@ -61,7 +61,6 @@ module Strategy
 
   def generate
     @possible = all
-    @search = []
   end
 
   def all
@@ -69,12 +68,11 @@ module Strategy
   end
 
   def for(state)
-    search_round(state)
     next_position
   end
 
   def next_position
-    search || random
+    random
   end
 
   def random
@@ -82,38 +80,11 @@ module Strategy
     @possible.pop
   end
 
-  def search
-    if @search && @search.size > 0
-      @search.pop
-    else
-      nil
-    end
-  end
-
-  def search_round(state)
-    state.each_index do |y|
-      row = state[y]
-      row.each_index do |x|
-        search_near(x,y) if row[x] == :hit
-      end
-    end
-  end
-
-  def search_near(x,y)
-    [[x-1,y-1],[x-1,y],[x-1,y+1],[x,y-1],[x,y+1],[x+1,y+1],[x+1,y],[x+1,y+1]].each { |coords| search_at *coords }
-  end
-
-  def search_at(x,y)
-    if @possible.include? [x,y]
-      @search << [x,y]
-      @possible.delete [x,y]
-    end
-  end
 end
 
-class JonsPlayer
+class DumbPlayer
   def name
-    "Jon's Less Stupid Player"
+    "Jon's Random Player"
   end
 
   def new_game
